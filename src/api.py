@@ -42,4 +42,4 @@ if not os.path.exists("public"):
 app.mount("/", StaticFiles(directory="public", html=True), name="public")
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8002)
+    uvicorn.run(app, host="0.0.0.0", port=8005)
