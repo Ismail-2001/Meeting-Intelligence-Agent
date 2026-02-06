@@ -78,11 +78,15 @@ The platform follows a modular **Planner-Executor-Synthesizer** pattern:
 
 ---
 
-## 📖 Usage
+### Web Dashboard (Localhost)
+Process intelligence visually via the premium web interface:
+```bash
+python src/api.py
+```
+Open [http://localhost:8001](http://localhost:8001) in your browser.
 
-Run the platform via the CLI agentic interface:
-
-### Analyze a Meeting Transcript
+### CLI Usage
+Run the platform via the command line for batch processing:
 ```bash
 python src/main.py --request "Summarize this meeting and extract action items" --file transcripts/sync_meeting.txt --provider openai
 ```

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meeting Intelligence Agent | Agentic AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-hover: #4f46e5;
+            --bg: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --text: #f8fafc;
+            --text-dim: #94a3b8;
+            --accent: #22d3ee;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0, transparent 50%),
+                radial-gradient(at 50% 0%, rgba(34, 211, 238, 0.1) 0, transparent 50%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            background: linear-gradient(to right, #818cf8, #22d3ee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            flex: 1;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.75rem;
+            font-weight: 500;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        button {
+            width: 100%;
+            background: linear-gradient(to right, var(--primary), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 1.25rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(99, 102, 241, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        #result-container {
+            margin-top: 3rem;
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        pre {
+            background: #020617;
+            padding: 2rem;
+            border-radius: 16px;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            color: #d1d5db;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(34, 211, 238, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+        }
+
+        footer {
+            padding: 2rem;
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Meeting Intelligence Agent</h1>
+        <p style="color: var(--text-dim)">Empowering business decisions with multi-agent orchestration</p>
+    </header>
+
+    <div class="container">
+        <div class="card">
+            <form id="agent-form">
+                <div class="form-group">
+                    <label>Intelligence Provider</label>
+                    <select id="provider">
+                        <option value="openai">DeepSeek / OpenAI Compatible</option>
+                        <option value="anthropic">Anthropic (Claude)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>User Request / Instruction</label>
+                    <input type="text" id="request" placeholder="e.g. Analyze this sales kickoff and extract MEDDIC scores" required>
+                </div>
+                <div class="form-group">
+                    <label>Content (Transcript or Process Description)</label>
+                    <textarea id="content" placeholder="Paste your meeting transcript or workflow steps here..." required></textarea>
+                </div>
+                <button type="submit" id="submit-btn">
+                    <span id="btn-text">Execute Orchestration</span>
+                    <div class="loader" id="loader"></div>
+                </button>
+            </form>
+        </div>
+
+        <div id="result-container">
+            <div class="result-header">
+                <h2 class="result-title">Intelligence Report</h2>
+                <div class="badge">JSON Response</div>
+            </div>
+            <pre id="result-output"></pre>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2026 Agentic AI Platform | Built for Scale
+    </footer>
+
+    <script>
+        const form = document.getElementById('agent-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const btnText = document.getElementById('btn-text');
+        const loader = document.getElementById('loader');
+        const resultContainer = document.getElementById('result-container');
+        const resultOutput = document.getElementById('result-output');
+
+        form.onsubmit = async (e) => {
+            e.preventDefault();
+            
+            const request = document.getElementById('request').value;
+            const content = document.getElementById('content').value;
+            const provider = document.getElementById('provider').value;
+
+            // UI State
+            btnText.innerText = 'Orchestrating Agents...';
+            loader.style.display = 'block';
+            submitBtn.disabled = true;
+            resultContainer.style.display = 'none';
+
+            try {
+                const response = await fetch('/api/process', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ request, content, provider })
+                });
+
+                const data = await response.json();
+                
+                resultOutput.innerText = JSON.stringify(data, null, 2);
+                resultContainer.style.display = 'block';
+                resultContainer.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                alert('An error occurred during orchestration. Check console for details.');
+                console.error(err);
+            } finally {
+                btnText.innerText = 'Execute Orchestration';
+                loader.style.display = 'none';
+                submitBtn.disabled = false;
+            }
+        };
+    </script>
+</body>
+</html>
