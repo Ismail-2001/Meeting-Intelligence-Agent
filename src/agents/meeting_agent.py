@@ -23,11 +23,19 @@ class MeetingAgent:
         try:
             return json.loads(response_text)
         except json.JSONDecodeError:
-            # Fallback in case raw text contains markdown blocks like ```json ... ```
+            # Try to find a JSON block in the response
+            import re
+            json_match = re.search(r'\{.*\}', response_text, re.DOTALL)
+            if json_match:
+                try:
+                    return json.loads(json_match.group())
+                except:
+                    pass
+
             if "```json" in response_text:
-                cleaned = response_text.split("```json")[1].split("```")[0]
+                cleaned = response_text.split("```json")[1].split("```")[0].strip()
                 return json.loads(cleaned)
             elif "```" in response_text:
-                cleaned = response_text.split("```")[1].split("```")[0]
+                cleaned = response_text.split("```")[1].split("```")[0].strip()
                 return json.loads(cleaned)
             return {"error": "Failed to parse JSON", "raw_response": response_text}
