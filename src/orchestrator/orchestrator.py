@@ -72,8 +72,10 @@ class Orchestrator:
             f"USER REQUEST: {user_request}\n\n"
             f"ORCHESTRATION PLAN EXECUTED: {json.dumps(orchestration_plan)}\n\n"
             f"AGENT OUTPUTS: {json.dumps(agent_outputs)}\n\n"
-            "Please generate the final response JSON containing 'synthesis', 'unified_response', and 'metadata' as per your system prompt structure. "
-            "You can include the previous 'orchestration_plan' and 'agent_outputs' in the final JSON for completeness."
+            "Please generate the final response JSON. CRITICAL: Ensure the JSON includes:\n"
+            "1. 'unified_response' with 'executive_summary', 'decisions' (list), 'action_items' (list of objects with 'task' and 'owner'), and 'next_steps' (list).\n"
+            "2. 'metadata' with 'confidence_score' (0.0 to 1.0) and 'agents_utilized'.\n"
+            "Include as much detail as possible from the agent outputs."
         )
 
         final_response = self.client.generate(
